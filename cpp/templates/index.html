@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traductor Español a C++</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Traductor de Español a C++</h1>
+        
+        <div class="input-section">
+            <textarea id="texto-entrada" placeholder="Escribe tu código en español... Ejemplo: 'si x es menor que y'"></textarea>
+            <button onclick="traducir()">Traducir a C++</button>
+        </div>
+        
+        <div class="output-section">
+            <pre id="codigo-salida">El código C++ aparecerá aquí...</pre>
+        </div>
+        
+        <div class="examples">
+            <h3>Ejemplos:</h3>
+            <ul>
+                <li onclick="usarEjemplo(this)">si x es menor que y entonces imprimir "x es menor"</li>
+                <li onclick="usarEjemplo(this)">mientras i es menor que 10 hacer imprimir i</li>
+                <li onclick="usarEjemplo(this)">para i desde 0 hasta 10 hacer imprimir i</li>
+                <li onclick="usarEjemplo(this)">incluir libreria estandar</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function traducir() {
+            const texto = document.getElementById('texto-entrada').value;
+            
+            fetch('/traducir', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `texto=${encodeURIComponent(texto)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('codigo-salida').textContent = data.codigo;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        
+        function usarEjemplo(elemento) {
+            document.getElementById('texto-entrada').value = elemento.textContent;
+            traducir();
+        }
+        
+        // Permitir usar Enter para traducir
+        document.getElementById('texto-entrada').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                traducir();
+            }
+        });
+    </script>
+</body>
+</html>
