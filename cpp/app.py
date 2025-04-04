@@ -209,6 +209,7 @@ def traducir_declaracion_variable(declaracion):
         return f"{tipo} {nombre} = {traducir_valor(valor)};"
     return f"{tipo} {nombre};"
 
+# Analisis Lexico y Sintactico
 def traducir_funcion(declaracion, cuerpo):
     # Ejemplo: "entero función suma(entero a, entero b) que retorna a + b"
     match = re.match(r"([a-zA-ZáéíóúñÑ\s]+)\s+funci[óo]n\s+([a-zA-Z_]\w*)\s*\((.*)\)", declaracion)
@@ -238,7 +239,7 @@ def traducir_funcion(declaracion, cuerpo):
         cuerpo_trad = traducir_frase(cuerpo_trad)
     
     return f"{tipo_retorno} {nombre}({', '.join(params_trad)}) {{\n    {cuerpo_trad}\n}}"
-
+# Analisis Lexico y Sintactico
 def traducir_frase(frase):
     frase = frase.strip().lower()
     
